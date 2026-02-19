@@ -7,10 +7,8 @@ export async function POST(request) {
     return NextResponse.json({ error: 'URL is required' }, { status: 400 });
   }
 
-  // هنا كتحط الـ API اللي كيخرج الفيديو. مثال بسيط:
   try {
-    // هاد الرابط مثال فقط، خاصك تعوضو بـ API حقيقي بحال (Tikwm أو غيره)
-    const downloadUrl = `https://api.tikwm.com{encodeURIComponent(url)}`;
+    const downloadUrl = `https://api.tikwm.com/?url=${encodeURIComponent(url)}`;
     
     return NextResponse.json({ downloadUrl });
   } catch (error) {
