@@ -3,61 +3,43 @@ import { useState } from "react";
 
 export default function Home() {
   const [url, setUrl] = useState("");
-  const [video, setVideo] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  async function handleDownload() {
-    if (!url) return alert("Paste a link!");
-
-    setLoading(true);
-    setVideo(null);
-
-    const res = await fetch("/api/download", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url }),
-    });
-
-    const data = await res.json();
-    setLoading(false);
-
-    if (data.success) {
-      setVideo(data.video);
-    } else {
-      alert("Error fetching video");
-    }
-  }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-black text-white p-8">
-      <h1 className="text-4xl font-bold mb-6 text-green-400">
-        ClipNova 🚀
-      </h1>
+    <main className="min-h-screen bg-gradient-to-br from-black via-zinc-900 to-black text-white flex items-center justify-center px-6">
+      
+      <div className="w-full max-w-2xl text-center">
 
-      <input
-        type="text"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-        placeholder="Paste TikTok / Reels link"
-        className="w-full max-w-lg p-4 rounded-lg text-black"
-      />
+        <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-green-400 to-emerald-600 text-transparent bg-clip-text">
+          ClipNova
+        </h1>
 
-      <button
-        onClick={handleDownload}
-        className="mt-4 w-full max-w-lg bg-green-400 p-4 font-bold text-black rounded-lg"
-      >
-        {loading ? "Processing..." : "Download"}
-      </button>
+        <p className="text-zinc-400 mb-10 text-lg">
+          Download TikTok, Reels & Shorts in HD – Fast & Clean
+        </p>
 
-      {video && (
-        <a
-          href={video}
-          target="_blank"
-          className="mt-6 bg-pink-600 px-6 py-4 rounded-lg font-bold"
-        >
-          DOWNLOAD HD
-        </a>
-      )}
+        <div className="bg-white/5 backdrop-blur-xl p-6 rounded-2xl border border-white/10 shadow-2xl">
+
+          <input
+            type="text"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="Paste video link here..."
+            className="w-full p-4 rounded-xl bg-black border border-zinc-700 focus:outline-none focus:border-green-400 transition"
+          />
+
+          <button
+            className="w-full mt-4 p-4 rounded-xl font-bold bg-gradient-to-r from-green-400 to-emerald-600 hover:scale-105 transition transform"
+          >
+            Download
+          </button>
+
+        </div>
+
+        <div className="mt-12 text-sm text-zinc-500">
+          No watermark • No login • 100% Free
+        </div>
+
+      </div>
     </main>
   );
 }
