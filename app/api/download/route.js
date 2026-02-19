@@ -1,20 +1,19 @@
 import { NextResponse } from 'next/server';
 
-export async function POST(req) {
+export async function POST(request) {
+  const { url } = await request.json();
+
+  if (!url) {
+    return NextResponse.json({ error: 'URL is required' }, { status: 400 });
+  }
+
+  // هنا كتحط الـ API اللي كيخرج الفيديو. مثال بسيط:
   try {
-    const { url } = await req.json();
-
-    // ملاحظة: هنا يجب استدعاء API حقيقي مثل RapidAPI أو Scraper
-    // هذا مثال تجريبي (Dummy Response)
-    const mockApiUrl = `https://api.example.com/fetch?url=${encodeURIComponent(url)}`;
+    // هاد الرابط مثال فقط، خاصك تعوضو بـ API حقيقي بحال (Tikwm أو غيره)
+    const downloadUrl = `https://api.tikwm.com{encodeURIComponent(url)}`;
     
-    // منطق الاستخراج (بشكل مبسط):
-    return NextResponse.json({ 
-      success: true,
-      downloadUrl: "رابط_الفيديو_المستخرج_هنا" 
-    });
-
+    return NextResponse.json({ downloadUrl });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to process" }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch video' }, { status: 500 });
   }
 }
