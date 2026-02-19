@@ -1,37 +1,63 @@
-"use client";
 
 import { useState } from "react";
-import { Download } from "lucide-react";
 
 export default function Home() {
   const [url, setUrl] = useState("");
+  const [video, setVideo] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  async function handleDownload() {
+    if (!url) return alert("Paste a link!");
+
+    setLoading(true);
+    setVideo(null);
+
+    const res = await fetch("/api/download", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url }),
+    });
+
+    const data = await res.json();
+    setLoading(false);
+
+    if (data.success) {
+      setVideo(data.video);
+    } else {
+      alert("Error fetching video");
+    }
+  }
 
   return (
-    <main className="min-h-screen bg-black text-white flex items-center justify-center px-4">
-      <div className="text-center max-w-2xl w-full">
-        <h1 className="text-5xl font-extrabold mb-6">
-          CLIP<span className="text-green-500">NOVA</span>
-        </h1>
+    <main className="min-h-screen flex flex-col items-center justify-center bg-black text-white p-8">
+      <h1 className="text-4xl font-bold mb-6 text-green-400">
+        ClipNova 🚀
+      </h1>
 
-        <p className="text-zinc-400 mb-8">
-          Download TikTok, Reels & Shorts in HD
-        </p>
+      <input
+        type="text"
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
+        placeholder="Paste TikTok/Shorts/Reels link"
+        className="w-full max-w-lg p-4 rounded-lg text-black"
+      />
 
-        <div className="flex gap-2">
-          <input
-            type="text"
-            placeholder="Paste video link..."
-            className="flex-1 px-4 py-3 rounded-lg bg-zinc-900 border border-zinc-700 outline-none"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-          />
+      <button
+        onClick={handleDownload}
+        className="mt-4 w-full max-w-lg bg-green-400 p-4 font-bold text-black rounded-lg"
+      >
+        {loading ? "Processing..." : "Download"}
+      </button>
 
-          <button className="bg-green-500 hover:bg-green-400 text-black px-6 py-3 rounded-lg flex items-center gap-2">
-            <Download size={18} />
-            Download
-          </button>
-        </div>
-      </div>
+      {video && (
+        <a
+          href={video}
+          target="_blank"
+          className="mt-6 bg-pink-600 px-6 py-4 rounded-lg font-bold"
+        >
+          DOWNLOAD HD
+        </a>
+      )}
     </main>
   );
 }
